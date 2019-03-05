@@ -1,5 +1,7 @@
 package com.revature.models;
 
+import java.util.Arrays;
+
 public class Reimb {
 	private int reimbId;
 	private int reimbAmmount;
@@ -8,6 +10,13 @@ public class Reimb {
 	private int userId;
 	private int statusId;
 	private int typeId;
+	private byte[] receipt;
+	public byte[] getReceipt() {
+		return receipt;
+	}
+	public void setReceipt(byte[] receipt) {
+		this.receipt = receipt;
+	}
 	public int getReimbId() {
 		return reimbId;
 	}
@@ -56,6 +65,7 @@ public class Reimb {
 		int result = 1;
 		result = prime * result + (isResolved ? 1231 : 1237);
 		result = prime * result + (isSubmitted ? 1231 : 1237);
+		result = prime * result + Arrays.hashCode(receipt);
 		result = prime * result + reimbAmmount;
 		result = prime * result + reimbId;
 		result = prime * result + statusId;
@@ -76,6 +86,8 @@ public class Reimb {
 			return false;
 		if (isSubmitted != other.isSubmitted)
 			return false;
+		if (!Arrays.equals(receipt, other.receipt))
+			return false;
 		if (reimbAmmount != other.reimbAmmount)
 			return false;
 		if (reimbId != other.reimbId)
@@ -92,7 +104,7 @@ public class Reimb {
 	public String toString() {
 		return "Reimb [reimbId=" + reimbId + ", reimbAmmount=" + reimbAmmount + ", isSubmitted=" + isSubmitted
 				+ ", isResolved=" + isResolved + ", userId=" + userId + ", statusId=" + statusId + ", typeId=" + typeId
-				+ "]";
+				+ ", receipt=" + Arrays.toString(receipt) + "]";
 	}
 	
 	
