@@ -3,6 +3,44 @@ package com.revature.models;
 public class UserRoles {
 	private int roleId;
 	private String roleName;
+	
+	public UserRoles (){}
+	
+	public UserRoles(int roleId, String roleName) {
+		super();
+		this.roleId = roleId;
+		this.roleName = roleName;
+	}
+	
+	public UserRoles(int roleId) {
+        this.roleId = roleId;
+
+        switch (roleId) {
+        case 1:
+            this.roleName = "MANAGER";
+        case 2:
+            this.roleName = "EMPLOYEE";
+        default:
+            this.roleName = null;
+        }
+    }
+
+    public UserRoles(String roleName) {
+        super();
+        this.roleName = roleName;
+
+        switch (roleName) {
+        case "MANAGER":
+            this.roleId = 1;
+            break;
+        case "EMPLOYEE":
+            this.roleId = 2;
+            break;
+        default:
+            this.roleId = 2;
+        }
+    }
+
 	public int getRoleId() {
 		return roleId;
 	}
