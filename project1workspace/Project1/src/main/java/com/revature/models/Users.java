@@ -6,7 +6,24 @@ public class Users {
 	private String password;
 	private String firstName;
 	private String lastName;
-	private String role_id;
+	private UserRoles role;
+	
+	public Users() {}
+	
+	
+	
+	public Users(int user_id, String userName, String password, String firstName, String lastName, UserRoles role) {
+		super();
+		this.user_id = user_id;
+		this.userName = userName;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.role = role;
+	}
+
+
+
 	public int getUser_id() {
 		return user_id;
 	}
@@ -37,11 +54,11 @@ public class Users {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getRole_id() {
-		return role_id;
+	public UserRoles getRole() {
+		return role;
 	}
-	public void setRole_id(String role_id) {
-		this.role_id = role_id;
+	public void setRole(UserRoles role) {
+		this.role = role;
 	}
 	@Override
 	public int hashCode() {
@@ -50,7 +67,7 @@ public class Users {
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((role_id == null) ? 0 : role_id.hashCode());
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		result = prime * result + user_id;
 		return result;
@@ -79,10 +96,10 @@ public class Users {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
-		if (role_id == null) {
-			if (other.role_id != null)
+		if (role == null) {
+			if (other.role != null)
 				return false;
-		} else if (!role_id.equals(other.role_id))
+		} else if (!role.equals(other.role))
 			return false;
 		if (userName == null) {
 			if (other.userName != null)
@@ -96,7 +113,7 @@ public class Users {
 	@Override
 	public String toString() {
 		return "Users [user_id=" + user_id + ", userName=" + userName + ", password=" + password + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", role_id=" + role_id + "]";
+				+ firstName + ", lastName=" + lastName + ", role=" + role + "]";
 	}
 	
 	

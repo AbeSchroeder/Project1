@@ -5,18 +5,12 @@ import java.util.Arrays;
 public class Reimb {
 	private int reimbId;
 	private int reimbAmmount;
-	private boolean isSubmitted;
-	private boolean isResolved;
+	private int isSubmitted;
+	private int isResolved;
 	private int userId;
 	private int statusId;
 	private int typeId;
 	private byte[] receipt;
-	public byte[] getReceipt() {
-		return receipt;
-	}
-	public void setReceipt(byte[] receipt) {
-		this.receipt = receipt;
-	}
 	public int getReimbId() {
 		return reimbId;
 	}
@@ -29,16 +23,16 @@ public class Reimb {
 	public void setReimbAmmount(int reimbAmmount) {
 		this.reimbAmmount = reimbAmmount;
 	}
-	public boolean isSubmitted() {
+	public int getIsSubmitted() {
 		return isSubmitted;
 	}
-	public void setSubmitted(boolean isSubmitted) {
+	public void setIsSubmitted(int isSubmitted) {
 		this.isSubmitted = isSubmitted;
 	}
-	public boolean isResolved() {
+	public int getIsResolved() {
 		return isResolved;
 	}
-	public void setResolved(boolean isResolved) {
+	public void setIsResolved(int isResolved) {
 		this.isResolved = isResolved;
 	}
 	public int getUserId() {
@@ -59,12 +53,18 @@ public class Reimb {
 	public void setTypeId(int typeId) {
 		this.typeId = typeId;
 	}
+	public byte[] getReceipt() {
+		return receipt;
+	}
+	public void setReceipt(byte[] receipt) {
+		this.receipt = receipt;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (isResolved ? 1231 : 1237);
-		result = prime * result + (isSubmitted ? 1231 : 1237);
+		result = prime * result + isResolved;
+		result = prime * result + isSubmitted;
 		result = prime * result + Arrays.hashCode(receipt);
 		result = prime * result + reimbAmmount;
 		result = prime * result + reimbId;

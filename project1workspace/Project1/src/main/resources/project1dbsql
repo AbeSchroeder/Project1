@@ -132,34 +132,4 @@ VALUES (1,'employee');
 INSERT INTO ers_user_roles
 VALUES (2,'manager');
 
-CREATE OR REPLACE PROCEDURE get_all_users
-   (
-       my_cursor OUT SYS_REFCURSOR
-   )
-IS
-BEGIN
-   OPEN my_cursor FOR
-   SELECT *
-   FROM ers_users A
-   JOIN ers_user_roles B
-   ON A.ers_role_id = B.ers_role_id
-   ORDER BY ers_user_id;
-END;
-/
 
-CREATE OR REPLACE PROCEDURE get_all_reimbs
-   (
-       my_cursor OUT SYS_REFCURSOR
-   )
-IS
-BEGIN
-   OPEN my_cursor FOR
-   SELECT *
-   FROM ers_reimbursement 
-   ORDER BY ers_user_id;
-END;
-/
-
-INSERT INTO ers_users VALUES (0, 'AbeS', 'password', 'Abe', 'Schroeder', 2);
-INSERT INTO ers_users VALUES(0,'SlavG', 'hi' ,'Slavik', 'Gleanco',2);
-COMMIT;
