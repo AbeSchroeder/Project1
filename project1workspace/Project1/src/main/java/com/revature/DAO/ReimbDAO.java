@@ -12,8 +12,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.revature.models.Reimb;
-import com.revature.models.UserRoles;
-import com.revature.models.Users;
+import com.revature.models.ReimbStatus;
+import com.revature.models.ReimbType;
 import com.revature.util.ConnectionFactory;
 
 import oracle.jdbc.internal.OracleTypes;
@@ -33,9 +33,7 @@ private static Logger log = Logger.getLogger(UserDAO.class);
 			cstmt.execute();
 
 			ResultSet rs = (ResultSet) cstmt.getObject(1);
-			allReimbs = this.mapResultSet(rs);
-				
-			
+			allReimbs = this.mapResultSet(rs);	
 
 		} catch (SQLException e) {
 			System.out.println();
@@ -46,20 +44,22 @@ private static Logger log = Logger.getLogger(UserDAO.class);
 	}
 
 	@Override
-	public Users add(Users newUser) 
+	public Reimb add(Reimb newReimb) 
 	{
 		try(Connection conn = ConnectionFactory.getInstance().getConnection())
 		{
 			conn.setAutoCommit(false);
-			String sql = "INSERT INTO ers_reimbs VALUES (0,?,?,?,?,?)";
+			String sql = "INSERT INTO ers_reimbursement VALUES (0,?,?,?,?,?,?)";
 			String[] keys = new String[1];
-			keys[0] = "ers_reimb_id";
+			keys[0] = "reimb_id";
 			PreparedStatement pstmt  = conn.prepareStatement(sql,keys); 
-			pstmt.setString(1, newUser.getUserName());
-			pstmt.setString(2, newUser.getPassword());
-			pstmt.setString(3, newUser.getFirstName());
-			pstmt.setString(4, newUser.getLastName());
-			pstmt.setInt(5, newUser.getRole().getRoleId());
+			pstmt.setInt(1, newReimb.getReimbAmmount());
+			pstmt.setInt(2, newReimb.getIsSubmitted());
+			pstmt.setInt(3, newReimb.getIsResolved());
+			pstmt.setInt(4, newReimb.getUserId());
+			pstmt.setInt(5, newReimb.getStatus().getStatusId());
+			pstmt.setInt(6, newReimb.getType().getTypeId());
+			//pstmt.setInt(5, newReimb.getReceipt()
 			
 			
 			if(pstmt.executeUpdate() != 0)
@@ -68,7 +68,7 @@ private static Logger log = Logger.getLogger(UserDAO.class);
 				
 				while(rs.next())
 				{
-					newUser.setUser_id(rs.getInt(1));
+					newReimb.setReimbId(rs.getInt(1));
 				}
 				conn.commit();
 			}
@@ -83,31 +83,32 @@ private static Logger log = Logger.getLogger(UserDAO.class);
         // TODO Auto-generated catch block
         e.printStackTrace();
     }
-		return newUser;
+		return newReimb;
 	}
 
 	@Override
-	public Users update(Users updatedUser) {
+	public Reimb update(Reimb updatedReimb) {
 		try(Connection conn = ConnectionFactory.getInstance().getConnection())
 		{
 			conn.setAutoCommit(false);
 			
-			String sql = "UPDATE ers_reimbs SET ers_password = ?, ers_first_name = ?, ers_last_name = ? WHERE ers_reimb_id = ?";
+			String sql = "UPDATE ers_reimbursement SET reimb_amount = ?, reimb_submitted = ?, reimb_resolved = ?, +"
+					+ " reimb_receipt = ?, reimb_status_id = ?, reimb_typed_id = ?, WHERE reimb_id = ?";
 			
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, updatedUser.getPassword());
-			pstmt.setString(2, updatedUser.getFirstName());
-			pstmt.setString(3, updatedUser.getLastName());
-			pstmt.setInt(4, updatedUser.getUser_id());
-			int rowsUpdated = pstmt.executeUpdate();
+			pstmt.setInt(1, updatedReimb.getReimbAmmount());
+			pstmt.setInt(2, updatedReimb.getIsSubmitted());
+			pstmt.setInt(3, updatedReimb.getIsResolved());
+			pstmt.setInt(4, updatedReimb.getStatus().getStatusId());
+			pstmt.setInt(5, updatedReimb.getType().getTypeId());
+			//pstmt.setInt(5, newReimb.getReceipt()
 			
-			if(rowsUpdated != 0) {
+			if(pstmt.executeUpdate() != 0) {
 				conn.commit();
-				return updatedUser;
+				return updatedReimb;
 			}
 		}
 			catch (SQLException e) {
-		        // TODO Auto-generated catch block
 		        e.printStackTrace();
 		    }
 			
@@ -120,7 +121,7 @@ private static Logger log = Logger.getLogger(UserDAO.class);
             
             conn.setAutoCommit(false);
             
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ers_reimbs WHERE ers_reimb_id = ?");
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ers_reimbursement WHERE reimb_id = ?");
             pstmt.setInt(1, reimbId);
             
             if (pstmt.executeUpdate() > 0) {
@@ -139,17 +140,15 @@ private static Logger log = Logger.getLogger(UserDAO.class);
 	private List<Reimb> mapResultSet(ResultSet rs) throws SQLException{
 		
 		List<Reimb> reimbsArray = new ArrayList<>();
-		while(rs.next())
-		{
-			
+		while(rs.next()) {	
 			Reimb reimb = new Reimb();
 			reimb.setReimbId(rs.getInt("reimb_id"));
 			reimb.setReimbAmmount(rs.getInt("reimb_amount"));
 			reimb.setIsSubmitted(rs.getInt("reimb_submitted"));
 			reimb.setIsResolved(rs.getInt("reimb_approved"));
 			reimb.setUserId(rs.getInt("ers_user_id"));
-			reimb.setStatusId(rs.getInt("ers_status_id"));
-			reimb.setTypeId(rs.getInt("ers_type_id"));
+			reimb.setStatus(new ReimbStatus(rs.getInt("ers_status_id")));
+			reimb.setType(new ReimbType(rs.getInt("ers_type_id")));
 			reimb.setReceipt(rs.getBytes("ers_receipt"));
 			
 			reimbsArray.add(reimb);

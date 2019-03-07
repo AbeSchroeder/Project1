@@ -8,9 +8,37 @@ public class Reimb {
 	private int isSubmitted;
 	private int isResolved;
 	private int userId;
-	private int statusId;
-	private int typeId;
+	private ReimbStatus status;
+	private ReimbType type;
 	private byte[] receipt;
+	
+	public Reimb() {}
+	
+	public Reimb(int reimbId, int reimbAmmount, int isSubmitted, int isResolved, int userId, ReimbStatus status,
+			ReimbType type) {
+		super();
+		this.reimbId = reimbId;
+		this.reimbAmmount = reimbAmmount;
+		this.isSubmitted = isSubmitted;
+		this.isResolved = isResolved;
+		this.userId = userId;
+		this.status = status;
+		this.type = type;
+	}
+	
+	public Reimb(int reimbId, int reimbAmmount, int isSubmitted, int isResolved, int userId, ReimbStatus status,
+			ReimbType type, byte[] receipt) {
+		super();
+		this.reimbId = reimbId;
+		this.reimbAmmount = reimbAmmount;
+		this.isSubmitted = isSubmitted;
+		this.isResolved = isResolved;
+		this.userId = userId;
+		this.status = status;
+		this.type = type;
+		this.receipt = receipt;
+	}
+
 	public int getReimbId() {
 		return reimbId;
 	}
@@ -41,17 +69,17 @@ public class Reimb {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	public int getStatusId() {
-		return statusId;
+	public ReimbStatus getStatus() {
+		return status;
 	}
-	public void setStatusId(int statusId) {
-		this.statusId = statusId;
+	public void setStatus(ReimbStatus status) {
+		this.status = status;
 	}
-	public int getTypeId() {
-		return typeId;
+	public ReimbType getType() {
+		return type;
 	}
-	public void setTypeId(int typeId) {
-		this.typeId = typeId;
+	public void setType(ReimbType type) {
+		this.type = type;
 	}
 	public byte[] getReceipt() {
 		return receipt;
@@ -68,8 +96,8 @@ public class Reimb {
 		result = prime * result + Arrays.hashCode(receipt);
 		result = prime * result + reimbAmmount;
 		result = prime * result + reimbId;
-		result = prime * result + statusId;
-		result = prime * result + typeId;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + userId;
 		return result;
 	}
@@ -92,9 +120,15 @@ public class Reimb {
 			return false;
 		if (reimbId != other.reimbId)
 			return false;
-		if (statusId != other.statusId)
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
 			return false;
-		if (typeId != other.typeId)
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
 			return false;
 		if (userId != other.userId)
 			return false;
@@ -103,9 +137,7 @@ public class Reimb {
 	@Override
 	public String toString() {
 		return "Reimb [reimbId=" + reimbId + ", reimbAmmount=" + reimbAmmount + ", isSubmitted=" + isSubmitted
-				+ ", isResolved=" + isResolved + ", userId=" + userId + ", statusId=" + statusId + ", typeId=" + typeId
+				+ ", isResolved=" + isResolved + ", userId=" + userId + ", status=" + status + ", type=" + type
 				+ ", receipt=" + Arrays.toString(receipt) + "]";
 	}
-	
-	
 }
