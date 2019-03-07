@@ -50,13 +50,13 @@ CREATE TABLE ers_users(
     REFERENCES ers_user_roles (ers_role_id)
 );
 
-DROP TABLE ers_reimbursement;
 CREATE TABLE ers_reimbursement(
     reimb_id            NUMBER,
     reimb_amount        NUMBER(20, 2),
     reimb_submitted     VARCHAR2(3),
     reimb_resolved      VARCHAR2(3),
     reimb_description   VARCHAR2(200),
+    reimb_receipt       BLOB,
     ers_user_id         NUMBER,
     reimb_status_id     NUMBER,
     reimb_type_id       NUMBER,
@@ -83,7 +83,11 @@ MAXVALUE 99999999
 INCREMENT BY 1
 START WITH 1;
 
-
+CREATE SEQUENCE ers_user_roles_pk_seq
+MINVALUE 1
+MAXVALUE 99999999
+INCREMENT BY 1
+START WITH 1;
 
 CREATE SEQUENCE ers_reimbursement_pk_seq
 MINVALUE 1
@@ -91,14 +95,34 @@ MAXVALUE 99999999
 INCREMENT BY 1
 START WITH 1;
 
+CREATE SEQUENCE ers_type_pk_seq
+MINVALUE 1
+MAXVALUE 99999999
+INCREMENT BY 1
+START WITH 1;
 
+CREATE SEQUENCE ers_status_pk_seq
+MINVALUE 1
+MAXVALUE 99999999
+INCREMENT BY 1
+START WITH 1;
 
 CREATE OR REPLACE TRIGGER ers_users_pk_trigger
 BEFORE INSERT ON ers_users
 FOR EACH ROW
 BEGIN
     SELECT ers_users_pk_seq.NEXTVAL
-    INTO :new.ers_user_id
+    INTO :new.ers_users_id
+    FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER ers_user_roles_pk_trigger
+BEFORE INSERT ON bank_accounts
+FOR EACH ROW
+BEGIN
+    SELECT ers_user_roles_pk_seq.NEXTVAL
+    INTO :new.ers_user_role_id
     FROM dual;
 END;
 /
@@ -107,59 +131,28 @@ CREATE OR REPLACE TRIGGER ers_reimbursement_pk_trigger
 BEFORE INSERT ON ers_reimbursement
 FOR EACH ROW
 BEGIN
-    SELECT ers_reimbursement_pk_seq.NEXTVAL
+    SELECT ers_remibursement_pk_seq.NEXTVAL
     INTO :new.reimb_id
     FROM dual;
 END;
 /
 
---INSERT INTO ers_reimbursement_status
---VALUES ('Pending', 1);
---INSERT INTO ers_reimbursement_status
---VALUES ('Approved', 2);
---INSERT INTO ers_reimbursement_status
---VALUES ('Denied', 3);
---INSERT INTO ers_reimbursement_type
---VALUES ('Lodging', 1);
---INSERT INTO ers_reimbursement_type
---VALUES ('Travel', 2);
---INSERT INTO ers_reimbursement_type
---VALUES ('Food', 3);
---INSERT INTO ers_reimbursement_type
---VALUES ('Other', 4);
---INSERT INTO ers_user_roles
---VALUES (1,'employee');
---INSERT INTO ers_user_roles
---VALUES (2,'manager');
-
-CREATE OR REPLACE PROCEDURE get_all_users
-   (
-       my_cursor OUT SYS_REFCURSOR
-   )
-IS
+CREATE OR REPLACE TRIGGER ers_type_pk_trigger
+BEFORE INSERT ON ers_reimbursement_type
+FOR EACH ROW
 BEGIN
-   OPEN my_cursor FOR
-   SELECT *
-   FROM ers_users A
-   JOIN ers_user_roles B
-   ON A.ers_role_id = B.ers_role_id
-   ORDER BY ers_user_id;
+    SELECT ers_type_pk_seq.NEXTVAL
+    INTO :new.reimb_type_id
+    FROM dual;
 END;
 /
 
-CREATE OR REPLACE PROCEDURE get_all_reimbs
-   (
-       my_cursor OUT SYS_REFCURSOR
-   )
-IS
+CREATE OR REPLACE TRIGGER ers_status_pk_trigger
+BEFORE INSERT ON ers_reimbursement_status
+FOR EACH ROW
 BEGIN
-   OPEN my_cursor FOR
-   SELECT *
-   FROM ers_reimbursement 
-   ORDER BY ers_user_id;
+    SELECT ers_status_pk_seq.NEXTVAL
+    INTO :new.reimb_status_id
+    FROM dual;
 END;
 /
-
-INSERT INTO ers_users VALUES (0, 'AbeS', 'password', 'Abe', 'Schroeder', 2);
-INSERT INTO ers_users VALUES(0,'SlavG', 'hi' ,'Slavik', 'Gleanco',2);
-COMMIT;

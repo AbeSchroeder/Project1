@@ -10,8 +10,6 @@ public class Users {
 	
 	public Users() {}
 	
-	
-	
 	public Users(int user_id, String userName, String password, String firstName, String lastName, UserRoles role) {
 		super();
 		this.user_id = user_id;
@@ -21,8 +19,6 @@ public class Users {
 		this.lastName = lastName;
 		this.role = role;
 	}
-
-
 
 	public int getUser_id() {
 		return user_id;
