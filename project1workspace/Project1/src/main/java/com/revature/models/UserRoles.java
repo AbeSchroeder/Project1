@@ -18,8 +18,10 @@ public class UserRoles {
         switch (roleId) {
         case 1:
             this.roleName = "MANAGER";
+            break;
         case 2:
             this.roleName = "EMPLOYEE";
+            break;
         default:
             this.roleName = null;
         }
